@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetAnaliz - Profil Sayfası</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #2f46d9, #9f00ff);
+        }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .hover-scale {
+            transition: transform 0.3s ease;
+        }
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <div class="container mx-auto px-4 py-12">
+        <div class="glassmorphism p-8 max-w-4xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center mb-8">
+                <div class="profile-picture-container relative w-32 h-32 rounded-full overflow-hidden mb-4 md:mb-0 md:mr-8">
+                    <img src="/Images/<%= user.pictures.profilePicture %>" alt="Profil Resmi" class="w-full h-full object-cover">
+                    <div class="overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        <label for="avatar-input" class="cursor-pointer text-white">
+                            <i class="fas fa-camera text-3xl"></i>
+                        </label>
+                    </div>
+                </div>
+                <form id="profile-form" action="/user/changePicture" method="post" enctype="multipart/form-data" class="hidden">
+                    <input type="file" name="profilePicture" id="avatar-input" class="hidden" onchange="this.form.submit()">
+                </form>
+                <div class="text-center md:text-left">
+                    <h1 class="text-3xl font-bold mb-2"><%= user.name %></h1>
+                    <p class="text-blue-300 mb-2">12. Sınıf Öğrencisi</p>
+                    <p class="text-sm text-gray-300">Son giriş: 14 Temmuz 2024, 15:30</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="glassmorphism p-6 hover-scale">
+                    <h2 class="text-xl font-semibold mb-4">Hesap Bilgileri</h2>
+                    <p><strong>E-posta:</strong> <%= user.email %> </p>
+                    <p><strong>Alanı:</strong> <%= user.studyField %> </p>
+                    <p><strong>Okul:</strong> Sabahattin Zaim</p>
+                    <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full text-sm transition duration-300 ease-in-out">
+                        <i class="fas fa-edit mr-2"></i>Bilgileri Düzenle
+                    </button>
+                </div>
+                <div class="glassmorphism p-6 hover-scale">
+                    <h2 class="text-xl font-semibold mb-4">Güvenlik Ayarları</h2>
+                    <button class="mb-3 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full text-sm transition duration-300 ease-in-out w-full">
+                        <i class="fas fa-key mr-2"></i>Şifre Değiştir
+                    </button>
+                    <button class="mb-3 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-full text-sm transition duration-300 ease-in-out w-full">
+                        <i class="fas fa-shield-alt mr-2"></i>İki Faktörlü Doğrulama
+                    </button>
+                    <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full text-sm transition duration-300 ease-in-out w-full">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Çıkış Yap
+                    </button>
+                </div>
+            </div>
+
+            <div class="glassmorphism p-6 mb-8">
+                <h2 class="text-2xl font-semibold mb-4">Performans Özeti</h2>
+                <div class="h-64">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glassmorphism p-6 text-center hover-scale">
+                    <i class="fas fa-trophy text-4xl text-yellow-400 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">En Yüksek Net</h3>
+                    <p class="text-3xl font-bold">495.23</p>
+                </div>
+                <div class="glassmorphism p-6 text-center hover-scale">
+                    <i class="fas fa-chart-line text-4xl text-green-400 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Toplam Çözülen Deneme</h3>
+                    <p class="text-3xl font-bold">50</p>
+                </div>
+                <div class="glassmorphism p-6 text-center hover-scale">
+                    <i class="fas fa-clock text-4xl text-blue-400 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Toplam Çalışma Süresi</h3>
+                    <p class="text-3xl font-bold">120 saat</p>
+                </div>
+            </div>
+
+            <div class="glassmorphism p-6">
+                <h2 class="text-2xl font-semibold mb-4">Hedefler</h2>
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-semibold">YKS Hedef Puan</h3>
+                        <p class="text-sm text-gray-300">500 puan</p>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="bg-blue-900 rounded-full h-4">
+                            <div class="bg-blue-500 rounded-full h-4" style="width: 80%;"></div>
+                        </div>
+                    </div>
+                    <p class="text-lg font-semibold">80%</p>
+                </div>
+                <button class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2 rounded-full text-sm transition duration-300 ease-in-out">
+                    <i class="fas fa-plus mr-2"></i>Yeni Hedef Ekle
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Performans grafiği
+        var ctx = document.getElementById('performanceChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran'],
+            datasets: [{
+                label: 'TYT Puanı',
+                data: [320, 350, 380, 410, 430, 450],
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgb(75, 192, 192)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: 'white' // Y ekseni etiketlerini beyaz yapar
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)' // Y ekseni çizgilerini hafif beyaz yapar
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: 'white' // X ekseni etiketlerini beyaz yapar
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)' // X ekseni çizgilerini hafif beyaz yapar
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'white' // Grafik açıklamasını beyaz yapar
+                    }
+                }
+            }
+        }
+    });;
+    </script>
+</body>
+</html>

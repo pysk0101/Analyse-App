@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetAnaliz - Giriş Yap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+</head>
+
+<body
+    class="min-h-screen bg-gradient-to-br from-blue-900 via-purple-800 to-indigo-900 text-white flex items-center justify-center">
+    <div class="bg-white/10 backdrop-blur-lg rounded-xl p-8 w-full max-w-md animate__animated animate__fadeIn">
+        <h2 class="text-3xl font-bold mb-6 text-center animate__animated animate__fadeInDown">NetAnaliz'e Hoş Geldiniz
+        </h2>
+        <form id="loginForm" class="space-y-6">
+            <div class="animate__animated animate__fadeInLeft">
+                <label for="name" class="block text-sm font-medium">Kullanıcı İsmi</label>
+                <input type="text" id="name" name="name" required
+                    class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/10 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div class="animate__animated animate__fadeInRight">
+                <label for="email" class="block text-sm font-medium">E-posta</label>
+                <input type="email" id="email" name="email" required
+                    class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/10 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div class="animate__animated animate__fadeInLeft">
+                <label for="password" class="block text-sm font-medium">Şifre</label>
+                <input type="password" id="password" name="password" required
+                    class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/10 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
+            <div class="animate__animated animate__fadeInRight">
+                <label for="studyFile" class="block text-sm font-medium">Çalışma Alanı</label>
+                <select id="studyField" name="studyField" required
+                    class="mt-1 block w-full px-3 py-2 bg-white/5 border border-white/10 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <option style="color: black" value="">Seçiniz</option>
+                    <option style="color: black" value="yks">YKS</option>
+                    <option style="color: black" value="lgs">LGS</option>
+                    <option style="color: black" value="kpss">KPSS</option>
+                </select>
+            </div>
+            <div class="animate__animated animate__fadeInUp">
+                <button type="submit"
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
+                    Giriş Yap
+                </button>
+            </div>
+        </form>
+        <p class="mt-6 text-center text-sm animate__animated animate__fadeIn animate__delay-1s">
+            Zaten bir hesabım var <a href="login" class="font-medium text-blue-300 hover:text-blue-200">Giriş Yap</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            try {
+                const formData = new FormData(this);
+                const formObject = {};
+                formData.forEach((value, key) => {
+                    formObject[key] = value;
+                });
+
+                // Fetch kullanarak POST isteği gönder
+                const response = await fetch('/auth/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formObject)
+                })
+
+                const result = await response.json();
+                if (result.success && result.redirectUrl) {
+                    window.location.href = result.redirectUrl;
+                }
+            } catch (error) {
+                alert('Bir hata oluştu:', error)
+            }
+        })
+
+        // Ek animasyonlar için
+        document.querySelectorAll('input, select').forEach(element => {
+            element.addEventListener('focus', function () {
+                this.classList.add('animate__animated', 'animate__pulse');
+            });
+            element.addEventListener('blur', function () {
+                this.classList.remove('animate__animated', 'animate__pulse');
+            });
+        });
+    </script>
+</body>
+
+</html>

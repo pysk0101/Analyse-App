@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TanjantPro İstatistikler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.0.1/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.2.0/dist/chartjs-adapter-luxon.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #e2e8f0; }
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+        }
+        .intro-text {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #60a5fa;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease-out;
+        }
+        .fade-out {
+            opacity: 0;
+        }
+        .slide-up {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    
+    </style>
+</head>
+<body class="min-h-screen p-8">
+    <div id="introOverlay" class="intro-overlay">
+        <h1 id="introText" class="intro-text">İstatistik Penceresi Açılıyor</h1>
+        
+    </div>
+    <div class="container mx-auto">
+        <h1 class="text-4xl font-bold text-center mb-12 text-blue-300"> İstatistikler</h1>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <div class="lg:col-span-2 bg-slate-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-4 text-blue-400">Deneme Performans Grafiği</h2>
+                <canvas id="lineChart" class="w-full h-64"></canvas>
+            </div>
+            <div class="bg-slate-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-4 text-blue-400">Deneme Detayı</h2>
+                <div id="examDetails" class="space-y-2">
+                    <p class="text-center text-slate-400">Detayları görmek için bir denemeye tıklayın.</p>
+                </div>
+                <canvas id="radarChart" class="mt-4 w-full h-64 hidden"></canvas>
+            </div>
+        </div>
+        
+        <div class="bg-slate-800 rounded-xl shadow-lg p-6">
+            <h2 class="text-2xl font-semibold mb-4 text-blue-400">Deneme Sonuçları</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left">
+                    <thead class="text-xs uppercase bg-slate-700 text-blue-300">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 rounded-tl-lg">İsim</th>
+                            <th scope="col" class="px-6 py-3">Tarih</th>
+                            <th scope="col" class="px-6 py-3">Net</th>
+                            <th scope="col" class="px-6 py-3 rounded-tr-lg">Süre (dk)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="statsTable">
+                        <!-- JavaScript ile doldurulacak -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 flex justify-between items-center text-sm text-slate-400">
+                <div>
+                    Page Size: 
+                    <select id="pageSize" class="bg-slate-700 border border-slate-600 text-white rounded-md px-2 py-1">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+                <div>1 to 10 of 10</div>
+                <div>
+                    Page 1 of 1
+                    <button class="px-2 py-1 bg-slate-700 rounded-md ml-2">&lt;</button>
+                    <button class="px-2 py-1 bg-slate-700 rounded-md">&gt;</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data = [
+            { name: "Ankara Deneme", date: '2024-05-28', net: 94.5, sure: 120, matematik: 20, turkce: 25, fen: 24.5, sosyal: 15 },
+            { name: "Okyanus Deneme", date: '2024-05-29', net: 95.5, sure: 90, matematik: 22, turkce: 24, fen: 23.5, sosyal: 16 },
+            { name: "Özdebir Deneme", date: '2024-05-30', net: 96.5, sure: 140, matematik: 33, turkce: 26, fen: 22, sosyal: 15.5 },
+            { name: "Toprak Deneme", date: '2024-05-31', net: 105.5, sure: 130, matematik: 15, turkce: 28, fen: 26.5, sosyal: 16 },
+            { name: "3D Deneme", date: '2024-06-01', net: 77.5, sure: 125, matematik: 25, turkce: 20, fen: 19.5, sosyal: 13 },
+            { name: "Final Deneme", date: '2024-06-02', net: 98.5, sure: 135, matematik: 34, turkce: 26, fen: 24, sosyal: 14.5 },
+            { name: "Süper Deneme", date: '2024-06-03', net: 92.0, sure: 115, matematik: 31, turkce: 24, fen: 23, sosyal: 14 },
+            { name: "Hedef Deneme", date: '2024-06-04', net: 101.0, sure: 130, matematik: 35, turkce: 27, fen: 24, sosyal: 15 },
+            { name: "Zirve Deneme", date: '2024-06-05', net: 89.5, sure: 120, matematik: 10, turkce: 23, fen: 22.5, sosyal: 14 },
+            { name: "Son Deneme", date: '2024-06-06', net: 97.0, sure: 125, matematik: 33, turkce: 25, fen: 24, sosyal: 15 }
+        ];
+
+        // Çizgi grafik
+        const ctx = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: 'Net Puan',
+                    data: data.map(d => ({ x: d.date, y: d.net })),
+                    borderColor: 'rgb(59, 130, 246)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            displayFormats: {
+                                day: 'dd MMM'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Tarih'
+                        },
+                        ticks: { color: '#94a3b8' },
+                        grid: { color: '#334155' }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Net Puan'
+                        },
+                        ticks: { color: '#94a3b8' },
+                        grid: { color: '#334155' }
+                    }
+                },
+                plugins: {
+                    legend: { labels: { color: '#e2e8f0' } }
+                }
+            }
+        });
+
+        // Radar grafik oluşturma fonksiyonu
+        let radarChart;
+        function createRadarChart(examData) {
+            if (radarChart) {
+                radarChart.destroy();
+            }
+            const radarCtx = document.getElementById('radarChart').getContext('2d');
+            radarChart = new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Matematik', 'Türkçe', 'Fen', 'Sosyal'],
+                    datasets: [{
+                        label: 'Net Puanlar',
+                        data: [examData.matematik, examData.turkce, examData.fen, examData.sosyal],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: 'rgb(59, 130, 246)',
+                        pointBackgroundColor: 'rgb(59, 130, 246)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(59, 130, 246)'
+                    }]
+                },
+                options: {
+                    elements: {
+                        line: {
+                            borderWidth: 3
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(255, 255, 255, 0.2)'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.2)'
+                            },
+                            pointLabels: {
+                                color: '#e2e8f0'
+                            },
+                            ticks: {
+                                color: '#94a3b8',
+                                backdropColor: 'transparent'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e2e8f0' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Deneme detaylarını gösterme fonksiyonu
+        function showExamDetails(exam) {
+            const detailsDiv = document.getElementById('examDetails');
+            detailsDiv.innerHTML = `
+                <p class="text-xl font-semibold">${exam.name}</p>
+                <p class="text-sm text-slate-400">${new Date(exam.date).toLocaleDateString('tr-TR')}</p>
+                <p class="mt-2">Matematik: <span class="font-semibold text-blue-300">${exam.matematik} net</span></p>
+                <p>Türkçe: <span class="font-semibold text-blue-300">${exam.turkce} net</span></p>
+                <p>Fen: <span class="font-semibold text-blue-300">${exam.fen} net</span></p>
+                <p>Sosyal: <span class="font-semibold text-blue-300">${exam.sosyal} net</span></p>
+                <p class="mt-2">Toplam: <span class="font-semibold text-green-400">${exam.net} net</span></p>
+                <p>Süre: <span class="font-semibold text-yellow-400">${exam.sure} dk</span></p>
+            `;
+            document.getElementById('radarChart').classList.remove('hidden');
+            createRadarChart(exam);
+        }
+
+        // Tablo doldurma
+        const tableBody = document.getElementById('statsTable');
+        data.forEach((deneme, index) => {
+            const row = tableBody.insertRow();
+            row.className = index % 2 === 0 ? 'bg-slate-700 hover:bg-slate-600' : 'bg-slate-600 hover:bg-slate-500';
+            row.style.cursor = 'pointer';
+            row.innerHTML = `
+                <td class="px-6 py-4 font-medium">${deneme.name}</td>
+                <td class="px-6 py-4">${new Date(deneme.date).toLocaleDateString('tr-TR')}</td>
+                <td class="px-6 py-4 font-semibold text-blue-300">${deneme.net.toFixed(1)}</td>
+                <td class="px-6 py-4">${deneme.sure}</td>
+            `;
+            row.onclick = () => showExamDetails(deneme);
+        });
+
+        // İlk deneme detaylarını göster
+        showExamDetails(data[0]);
+        window.addEventListener('load', () => {
+            const introText = document.getElementById('introText');
+            const introOverlay = document.getElementById('introOverlay');
+            
+            setTimeout(() => {
+                introText.classList.add('slide-up');
+            }, 300);
+
+            setTimeout(() => {
+                introOverlay.classList.add('fade-out');
+            }, 2000);
+
+            setTimeout(() => {
+                introOverlay.style.display = 'none';
+            }, 2500);
+        });
+    </script>
+</body>
+</html>

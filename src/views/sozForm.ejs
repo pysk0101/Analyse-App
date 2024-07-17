@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AYT Sözel Net Hesaplama</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-purple-900 to-indigo-900 text-white min-h-screen flex items-center justify-center p-4">
+    <div class="container max-w-4xl mx-auto p-8 bg-white/10 backdrop-blur-lg rounded-xl shadow-lg">
+        <h1 class="text-3xl font-bold mb-6 text-center">AYT Sözel Net Hesaplama</h1>
+        <form id="netHesaplamaForm">
+            <table class="w-full mb-6">
+                <thead>
+                    <tr class="border-b border-white/20">
+                        <th class="text-left py-2">Ders</th>
+                        <th class="text-center py-2">Doğru</th>
+                        <th class="text-center py-2">Yanlış</th>
+                        <th class="text-center py-2">Net</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b border-white/10">
+                        <td class="py-2">Türk Dili ve Edebiyatı</td>
+                        <td><input type="number" name="edebiyat_dogru" class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white" min="0"></td>
+                        <td><input type="number" name="edebiyat_yanlis" class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white" min="0"></td>
+                        <td class="text-center net-sonuc">0</td>
+                    </tr>
+                    <tr class="border-b border-white/10">
+                        <td class="py-2">Tarih-1</td>
+                        <td><input type="number" name="tarih1_dogru" class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white" min="0"></td>
+                        <td><input type="number" name="tarih1_yanlis" class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white" min="0"></td>
+                        <td class="text-center net-sonuc">0</td>
+                    </tr>
+                    <tr class="border-b border-white/10">
+                        <td class="py-2">Coğrafya-1</td>
+                        <td><input type="number" name="cografya1_dogru" class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white" min="0"></td>
+                        <td><input type="number" name="cografya1_yanlis" class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white" min="0"></td>
+                        <td class="text-center net-sonuc">0</td>
+                    </tr>
+                    <tr class="border-b border-white/10">
+                        <td class="py-2">Tarih-2</td>
+                        <td><input type="number" name="tarih2_dogru" class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white" min="0"></td>
+                        <td><input type="number" name="tarih2_yanlis" class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white" min="0"></td>
+                        <td class="text-center net-sonuc">0</td>
+                    </tr>
+                    <tr class="border-b border-white/10">
+                        <td class="py-2">Coğrafya-2</td>
+                        <td><input type="number" name="cografya2_dogru" class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white" min="0"></td>
+                        <td><input type="number" name="cografya2_yanlis" class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white" min="0"></td>
+                        <td class="text-center net-sonuc">0</td>
+                    </tr>
+                    <tr class="border-b border-white/10">
+                        <td class="py-2">Felsefe Grubu</td>
+                        <td><input type="number" name="felsefe_dogru" class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white" min="0"></td>
+                        <td><input type="number" name="felsefe_yanlis" class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white" min="0"></td>
+                        <td class="text-center net-sonuc">0</td>
+                    </tr>
+                    <tr class="border-b border-white/10">
+                        <td class="py-2">Din Kültürü</td>
+                        <td><input type="number" name="din_dogru" class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white" min="0"></td>
+                        <td><input type="number" name="din_yanlis" class="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white" min="0"></td>
+                        <td class="text-center net-sonuc">0</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="font-bold">
+                        <td class="py-2">Toplam</td>
+                        <td id="toplam_dogru" class="text-center">0</td>
+                        <td id="toplam_yanlis" class="text-center">0</td>
+                        <td id="toplam_net" class="text-center">0</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="flex justify-center space-x-4">
+                <button type="button" id="hesaplaBtn" class="px-6 py-2 bg-green-500 hover:bg-green-600 rounded-lg font-semibold transition">Hesapla</button>
+                <button type="button" id="sifirlaBtn" class="px-6 py-2 bg-red-500 hover:bg-red-600 rounded-lg font-semibold transition">Sıfırla</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        const form = document.getElementById('netHesaplamaForm');
+        const netSonuclar = document.querySelectorAll('.net-sonuc');
+        const toplamDogru = document.getElementById('toplam_dogru');
+        const toplamYanlis = document.getElementById('toplam_yanlis');
+        const toplamNet = document.getElementById('toplam_net');
+        const hesaplaBtn = document.getElementById('hesaplaBtn');
+        const sifirlaBtn = document.getElementById('sifirlaBtn');
+
+        function hesaplaNet() {
+            let toplamD = 0, toplamY = 0, toplamN = 0;
+            const dersler = ['edebiyat', 'tarih1', 'cografya1', 'tarih2', 'cografya2', 'felsefe', 'din'];
+
+            dersler.forEach((ders, index) => {
+                const dogru = parseInt(form[`${ders}_dogru`].value) || 0;
+                const yanlis = parseInt(form[`${ders}_yanlis`].value) || 0;
+                const net = dogru - (yanlis * 0.25);
+
+                netSonuclar[index].textContent = net.toFixed(2);
+                toplamD += dogru;
+                toplamY += yanlis;
+                toplamN += net;
+            });
+
+            toplamDogru.textContent = toplamD;
+            toplamYanlis.textContent = toplamY;
+            toplamNet.textContent = toplamN.toFixed(2);
+        }
+
+        function sifirla() {
+            form.reset();
+            netSonuclar.forEach(el => el.textContent = '0');
+            toplamDogru.textContent = '0';
+            toplamYanlis.textContent = '0';
+            toplamNet.textContent = '0';
+        }
+
+        hesaplaBtn.addEventListener('click', hesaplaNet);
+        sifirlaBtn.addEventListener('click', sifirla);
+    </script>
+</body>
+</html>

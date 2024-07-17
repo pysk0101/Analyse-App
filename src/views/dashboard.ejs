@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetAnaliz - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-blue-900 via-purple-800 to-indigo-900 text-white min-h-screen">
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 h-screen bg-white/10 backdrop-blur-lg p-6 space-y-8 fixed">
+            <div class="flex items-center space-x-4">
+                <img src="/Images/<%= user.pictures.profilePicture %>" alt="Avatar" class="rounded-full w-12 h-12">
+                <div>
+                    <h2 class="font-bold">Merhaba, <%= user.name %></h2>
+                    <p class="text-sm text-gray-300">Son giriş: Bugün</p>
+                </div>
+            </div>
+            <nav>
+                <ul class="space-y-4">
+                    <li><a href="/" class="flex items-center space-x-2 hover:text-blue-300 transition"><i class="fas fa-home"></i><span>Ana Sayfa</span></a></li>
+                    <li><a href="/dashboard/calculation" class="flex items-center space-x-2 hover:text-blue-300 transition"><i class="fas fa-edit"></i><span>Net Girişi</span></a></li>
+                    <li><a href="/dashboard/statistics" class="flex items-center space-x-2 hover:text-blue-300 transition"><i class="fas fa-chart-line"></i><span>Net İstatistikleri</span></a></li>
+                    <li><a href="/dashboard/profile" class="flex items-center space-x-2 hover:text-blue-300 transition"><i class="fas fa-user"></i><span>Profil</span></a></li>
+                    <li><a href="/auth/logout" class="flex items-center space-x-2 hover:text-red-600 transition" ><i class="fas fa-user"></i><span>Çıkış Yap</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 ml-64 p-8">
+            <header class="mb-8">
+                <h1 class="text-4xl font-bold">Dashboard</h1>
+            </header>
+
+            <!-- Quick Actions -->
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white/20 backdrop-blur-lg rounded-xl p-6 hover:bg-white/30 transition cursor-pointer">
+                    <h3 class="text-xl font-semibold mb-2">Hızlı Net Girişi</h3>
+                    <p>Son sınavınızın netlerini hemen girin.</p>
+                    <button class="mt-4 bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded">Net Gir</button>
+                </div>
+                <div class="bg-white/20 backdrop-blur-lg rounded-xl p-6 hover:bg-white/30 transition cursor-pointer">
+                    <h3 class="text-xl font-semibold mb-2">Net Analizi</h3>
+                    <p>Performansınızı analiz edin ve gelişiminizi görün.</p>
+                    <button class="mt-4 bg-green-500 hover:bg-green-600 px-4 py-2 rounded">Analiz Et</button>
+                </div>
+                <div class="bg-white/20 backdrop-blur-lg rounded-xl p-6 hover:bg-white/30 transition cursor-pointer">
+                    <h3 class="text-xl font-semibold mb-2">Hedef Belirleme</h3>
+                    <p>Yeni hedefler belirleyin ve ilerlemenizi takip edin.</p>
+                    <button class="mt-4 bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded">Hedef Belirle</button>
+                </div>
+            </section>
+
+            <!-- Performance Overview -->
+            <section class="bg-white/10 backdrop-blur-lg rounded-xl p-6 mb-12">
+                <h2 class="text-2xl font-bold mb-4">Performans Özeti</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-white/20 p-4 rounded-lg">
+                        <h4 class="font-semibold">Toplam Çözülen Soru</h4>
+                        <p class="text-3xl font-bold">1,234</p>
+                    </div>
+                    <div class="bg-white/20 p-4 rounded-lg">
+                        <h4 class="font-semibold">Ortalama Net</h4>
+                        <p class="text-3xl font-bold">65.7</p>
+                    </div>
+                    <div class="bg-white/20 p-4 rounded-lg">
+                        <h4 class="font-semibold">En Yüksek Net</h4>
+                        <p class="text-3xl font-bold">82.5</p>
+                    </div>
+                    <div class="bg-white/20 p-4 rounded-lg">
+                        <h4 class="font-semibold">Çalışma Süresi</h4>
+                        <p class="text-3xl font-bold">128 saat</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recent Activity -->
+            <section class="bg-white/10 backdrop-blur-lg rounded-xl p-6">
+                <h2 class="text-2xl font-bold mb-4">Son Aktiviteler</h2>
+                <ul class="space-y-4">
+                    <li class="flex items-center space-x-4">
+                        <div class="bg-blue-500 p-2 rounded-full"><i class="fas fa-edit"></i></div>
+                        <div>
+                            <p class="font-semibold">Yeni Net Girişi</p>
+                            <p class="text-sm text-gray-300">2 saat önce</p>
+                        </div>
+                    </li>
+                    <li class="flex items-center space-x-4">
+                        <div class="bg-green-500 p-2 rounded-full"><i class="fas fa-chart-line"></i></div>
+                        <div>
+                            <p class="font-semibold">Haftalık Analiz Raporu</p>
+                            <p class="text-sm text-gray-300">1 gün önce</p>
+                        </div>
+                    </li>
+                    <li class="flex items-center space-x-4">
+                        <div class="bg-purple-500 p-2 rounded-full"><i class="fas fa-bullseye"></i></div>
+                        <div>
+                            <p class="font-semibold">Yeni Hedef Belirlendi</p>
+                            <p class="text-sm text-gray-300">3 gün önce</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Burada gerekli JavaScript fonksiyonlarını ekleyebilirsiniz
+        // Örneğin, sayfa yüklendiğinde animasyonları tetiklemek için:
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('section').forEach((section, index) => {
+                section.classList.add('animate__animated', 'animate__fadeIn');
+                section.style.animationDelay = `${index * 0.2}s`;
+            });
+        });
+    </script>
+</body>
+</html>

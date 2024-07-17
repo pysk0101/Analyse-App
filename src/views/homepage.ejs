@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetAnaliz - Öğrenci Net Hesaplama ve Analiz Platformu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-blue-900  to-black text-white">
+    <header class="container mx-auto py-6 px-4">
+        <nav class="flex justify-between items-center">
+            <h1 class="text-2xl font-bold">NetAnaliz</h1>
+            <div>
+                <button id="loginBtn" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded mr-4">
+                    Giriş Yap
+                </button>
+                <button id="signupBtn" class="bg-white text-blue-900 hover:bg-gray-100 px-4 py-2 rounded">
+                    Kayıt Ol
+                </button>
+            </div>
+        </nav>
+    </header>
+    <main class="container mx-auto px-4 py-16">
+        <div class="text-center mb-16">
+            <h2 class="text-5xl font-bold mb-4">Netlerinizi Hesaplayın, Başarınızı Analiz Edin</h2>
+            <p class="text-xl mb-8">Öğrenciler için geliştirilmiş kapsamlı net hesaplama ve analiz platformu</p>
+            <button id="startBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full text-lg font-semibold">
+                Hemen Başla
+            </button>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+            <% features.forEach(function(feature) { %>
+                <div class="bg-blue-800 p-6 rounded-lg text-center">
+                    <i class="fas <%= feature.icon %> text-5xl mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2"><%= feature.title %></h3>
+                    <p><%= feature.description %></p>
+                </div>
+            <% }); %>
+        </div>
+    </main>
+    <footer class="bg-blue-900 py-6 mt-16">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 NetAnaliz. Tüm hakları saklıdır.</p>
+        </div>
+    </footer>
+    <script>
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            window.location.href = '/login';
+        });
+
+        document.getElementById('signupBtn').addEventListener('click', function() {
+            window.location.href = '/signup';
+        });
+
+        document.getElementById('startBtn').addEventListener('click', function() {
+            window.location.href = '/start';
+        });
+    </script>
+</body>
+</html>

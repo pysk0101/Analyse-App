@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetAnaliz - Giriş Yap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 text-white flex items-center justify-center">
+    <div class="bg-white/10 backdrop-blur-lg rounded-xl p-8 w-full max-w-md animate__animated animate__fadeIn">
+        <h2 class="text-3xl font-bold mb-6 text-center animate__animated animate__fadeInDown">NetAnaliz'e Giriş Yap</h2>
+        <form id="loginForm" class="space-y-6">
+            <div class="animate__animated animate__fadeInLeft">
+                <label for="email" class="block text-sm font-medium">E-posta</label>
+                <div class="mt-1 relative rounded-md shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-envelope text-gray-400"></i>
+                    </div>
+                    <input type="email" id="email" name="email" required class="block w-full pl-10 px-3 py-2 bg-white/5 border border-white/10 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="example@gmail.com">
+                </div>
+            </div>
+            <div class="animate__animated animate__fadeInRight">
+                <label for="password" class="block text-sm font-medium">Şifre</label>
+                <div class="mt-1 relative rounded-md shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-lock text-gray-400"></i>
+                    </div>
+                    <input type="password" id="password" name="password" required class="block w-full pl-10 px-3 py-2 bg-white/5 border border-white/10 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="********">
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <button type="button" id="togglePassword" class="text-gray-400 hover:text-white focus:outline-none">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between animate__animated animate__fadeInUp">
+                <div class="flex items-center">
+                    <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="remember-me" class="ml-2 block text-sm text-gray-300">
+                        Beni hatırla
+                    </label>
+                </div>
+                <div class="text-sm">   
+                    <a href="/" class="font-medium text-blue-300 hover:text-blue-200">
+                        Şifremi unuttum
+                    </a>
+                </div>
+            </div>
+            <div class="animate__animated animate__fadeInUp">
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
+                    Giriş Yap
+                </button>
+            </div>
+        </form>
+        <p class="mt-6 text-center text-sm animate__animated animate__fadeIn animate__delay-1s">
+            Hesabınız yok mu? <a href="signup" class="font-medium text-blue-300 hover:text-blue-200">Kayıt Ol</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            try {
+                const formData = new FormData(this);
+                const formObject = {};
+                formData.forEach((value, key) => {
+                    formObject[key] = value;
+                });
+
+                // Fetch kullanarak POST isteği gönder
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formObject)
+                })
+
+                const result = await response.json();
+                if (result.success && result.redirectUrl) {
+                    window.location.href = result.redirectUrl;
+                }
+            } catch (error) {
+                alert('Bir hata oluştu:', error)
+            }
+        })
+
+        // Şifre göster/gizle fonksiyonu
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Input alanları için animasyonlar
+        document.querySelectorAll('input').forEach(element => {
+            element.addEventListener('focus', function() {
+                this.parentElement.classList.add('animate__animated', 'animate__pulse');
+            });
+            element.addEventListener('blur', function() {
+                this.parentElement.classList.remove('animate__animated', 'animate__pulse');
+            });
+        });
+    </script>
+</body>
+</html>

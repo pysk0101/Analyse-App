@@ -1,0 +1,65 @@
+[
+    {
+        "name": "Muhammed",
+        "email": "muhammed@gmail.com",
+        "age": 25,
+        "password": "123456",
+        "isStudent": true,
+        "todos": [
+            {
+                "id": 1,
+                "title": "Learn Node.js",
+                "completed": false
+            },
+            {
+                "id": 2,
+                "title": "Learn React.js",
+                "completed": false
+            },
+            {
+                "id": 3,
+                "title": "Learn MongoDB",
+                "completed": false
+            }
+        ],
+        "mocksExams": [
+            {
+                "tyt": [
+                    {"obj": "669405786fafca14f3714081"}
+                ],
+                "ayt": [
+                    {}
+                ]
+            }
+        ],
+        "pictures": [
+            {
+                "profilePicture": "string",
+                "defautlt": "avatar.png"
+            },
+            {
+                "name": "coverPicture",
+                "defaut": "cover.png"
+            }
+        ]
+    },
+    {
+        "_id": {
+            "$oid": "6694b30c39fd8f8dc7ece532"
+        },
+        "userId": {
+            "id": "6623a54f57fasDFasdf54274"
+        },
+        "createdAt": "Date.Obj",
+        "examField": "tyt",
+        "solvingSpan": "120",
+        "mat-true": 20,
+        "mat-false": 15,
+        "fen-true": 20,
+        "fen-false": 15,
+        "turkce-true": 20,
+        "turkce-false": 15,
+        "sosyal-true": 12,
+        "sosyal-false": 4
+    }
+]

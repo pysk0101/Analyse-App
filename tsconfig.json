@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "lib": [
+            "ESNext",
+            "DOM"
+        ],
+        "target": "ESNext",
+        "module": "CommonJS",
+        "noImplicitAny": true,
+        "strict": true,
+        "alwaysStrict": false,
+        "esModuleInterop": true,
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "allowSyntheticDefaultImports": true,
+        "declaration": true,
+        "declarationDir": "./dist/types",
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "skipLibCheck": true
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules"]
+}
